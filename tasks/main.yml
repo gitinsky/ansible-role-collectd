@@ -1,0 +1,37 @@
+- name: download collectd
+  command: bash -c "cd /root && wget http://ns2.1888.spb.ru/collectd_5.4.1-2_amd64.deb" creates=/root/collectd_5.4.1-2_amd64.deb
+
+- shell: bash -c "dpkg -l collectd 2>&1; true"
+  register: collectd
+
+- name: setup libsnmp-dev
+  apt: name=libsnmp-dev state=present
+
+- name: install collectd
+  command: dpkg -i /root/collectd_5.4.1-2_amd64.deb
+  when: collectd.stdout.find('5.4.1-2') == -1
+
+- name: put collectd config file
+  template: src=collectd/collectd.conf dest=/opt/collectd/etc/collectd.conf owner=root group=root mode=0644
+  notify:
+  - restart collectd
+
+- name: put collectd types DB
+  template: src=collectd/types.db dest=/opt/collectd/share/collectd/types.db owner=root group=root mode=0644
+  notify:
+  - restart collectd
+
+- name: remove supervisord config if exists
+  file: name=/etc/supervisor/conf.d/collectd.conf state=absent
+  notify:
+  - restart supervisor
+
+- name: setup snmp
+  apt: name=snmp state=present
+
+- name: put collectd eye descriptor
+  template: src=collectd/collectd-eye.rb dest=/etc/eye/collectd.rb owner=root group=root mode=0644
+
+- name: load config in eye
+  command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
+  sudo: yes
