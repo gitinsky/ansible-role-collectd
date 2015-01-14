@@ -1,3 +1,6 @@
 ---
 - name: restart supervisor
   service: name=supervisor state=restarted
+
+- name: restart collectd
+  command: bash -c "source /usr/local/rvm/scripts/rvm && eye restart collectd"
