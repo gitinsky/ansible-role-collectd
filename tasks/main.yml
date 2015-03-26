@@ -1,3 +1,11 @@
+- name: try to determine carbon host ip address if it is not defined
+  set_fact:
+      carbon_host: "{{ hostvars[groups[collectd_grafana_group_search_prefix + '-grafana-hosts'][0]]['ansible_default_ipv4']['address']}}"
+  when: carbon_host is not defined
+
+- name: check carbon_host ip address variable
+  debug: var=carbon_host
+
 - name: download collectd
   command: bash -c "cd /root && wget http://ns2.1888.spb.ru/collectd_5.4.1-2_amd64.deb" creates=/root/collectd_5.4.1-2_amd64.deb
 

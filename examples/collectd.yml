@@ -1,0 +1,12 @@
+---
+- hosts: grafana-hosts
+  name: Gather facts from grafana-hosts
+  tasks:
+    - fail: msg=""
+      when: false
+      tags: debug
+      
+- hosts: collectd-hosts
+  sudo: yes
+  roles:
+    - role: collectd
