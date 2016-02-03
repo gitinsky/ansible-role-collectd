@@ -33,6 +33,7 @@
   file: name=/etc/supervisor/conf.d/collectd.conf state=absent
   notify:
   - restart supervisor
+  - restart collectd
 
 - name: setup snmp
   apt: name=snmp state=present
