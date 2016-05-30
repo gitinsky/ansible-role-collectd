@@ -20,7 +20,7 @@
   when: collectd.stdout.find('5.4.1-2') == -1
 
 - name: put collectd config file
-  template: src=collectd/collectd.conf dest=/opt/collectd/etc/collectd.conf owner=root group=root mode=0644
+  template: src=collectd/collectd.conf dest=/opt/collectd/etc/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf owner=root group=root mode=0644
   notify:
   - restart collectd
 
@@ -39,7 +39,7 @@
   apt: name=snmp state=present
 
 - name: put collectd eye descriptor
-  template: src=collectd/collectd-eye.rb dest=/etc/eye/collectd.rb owner=root group=root mode=0644
+  template: src=collectd/collectd-eye.rb dest=/etc/eye/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.rb owner=root group=root mode=0644
 
 - name: load config in eye
   command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
