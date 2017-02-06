@@ -1,0 +1,11 @@
+[Unit]
+Description=Collectd stats collector
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/opt/collectd/sbin/collectd -f -C /opt/collectd/etc/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf
+
+[Install]
+WantedBy=multi-user.target
