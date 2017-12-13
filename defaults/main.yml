@@ -1,3 +1,4 @@
 ---
 collectd_snmp_enabled: False
+collectd_statsd_enabled: False
 collectd_prefix: collectd
