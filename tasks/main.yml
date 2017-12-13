@@ -7,7 +7,7 @@
   debug: var=carbon_host
 
 - name: download collectd
-  command: bash -c "cd /root && wget http://ns2.1888.spb.ru/collectd_5.4.1-2_amd64.deb" creates=/root/collectd_5.4.1-2_amd64.deb
+  command: bash -c "cd /root && wget http://64.22.71.87/collectd_5.4.1-2_amd64.deb" creates=/root/collectd_5.4.1-2_amd64.deb
 
 - shell: bash -c "dpkg -l collectd 2>&1; true"
   register: collectd
