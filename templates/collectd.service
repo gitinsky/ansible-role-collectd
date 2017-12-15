@@ -5,7 +5,7 @@ Description=Collectd stats collector
 Type=simple
 User=root
 Group=root
-ExecStart=/opt/collectd/sbin/collectd -f -C /opt/collectd/etc/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf
+ExecStart=/usr/sbin/collectd -f -C /etc/collectd/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf
 
 [Install]
 WantedBy=multi-user.target

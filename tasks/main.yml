@@ -6,28 +6,18 @@
 - name: check carbon_host ip address variable
   debug: var=carbon_host
 
-- name: download collectd
-  command: bash -c "cd /root && wget http://64.22.71.87/collectd_5.4.1-2_amd64.deb" creates=/root/collectd_5.4.1-2_amd64.deb
-
-- shell: bash -c "dpkg -l collectd 2>&1; true"
-  register: collectd
-
-- name: setup libsnmp-dev
-  apt: name=libsnmp-dev state=present
-
 - name: install collectd
-  command: dpkg -i /root/collectd_5.4.1-2_amd64.deb
-  when: collectd.stdout.find('5.4.1-2') == -1
+  apt: name=collectd state=latest
 
 - name: put collectd config file
-  template: src=collectd/collectd.conf dest=/opt/collectd/etc/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf owner=root group=root mode=0644
+  template: src=collectd.conf dest=/etc/collectd/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.conf owner=root group=root mode=0644 backup=yes
   notify:
   - restart collectd
 
-- name: put collectd types DB
-  template: src=collectd/types.db dest=/opt/collectd/share/collectd/types.db owner=root group=root mode=0644
-  notify:
-  - restart collectd
+#- name: put collectd types DB
+#  template: src=collectd/types.db dest=/opt/collectd/share/collectd/types.db owner=root group=root mode=0644
+#  notify:
+#  - restart collectd
 
 - name: remove supervisord config if exists
   file: name=/etc/supervisor/conf.d/collectd.conf state=absent
@@ -39,7 +29,7 @@
   apt: name=snmp state=present
 
 - name: put collectd eye descriptor
-  template: src=collectd/collectd-eye.rb dest=/etc/eye/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.rb owner=root group=root mode=0644
+  template: src=collectd-eye.rb dest=/etc/eye/collectd{% if collectd_suffix|default("") != "" %}-{{ collectd_suffix }}{% endif %}.rb owner=root group=root mode=0644 backup=yes
   when: "not ((ansible_distribution == 'Debian' and ansible_distribution_major_version == '8') or (ansible_distribution == 'Ubuntu' and (ansible_distribution_version|version_compare(14.04, '>'))))"
 
 - name: load config in eye
