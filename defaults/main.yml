@@ -2,3 +2,4 @@
 collectd_snmp_enabled: False
 collectd_statsd_enabled: False
 collectd_prefix: collectd
+collectd_carbon_port: 2003
