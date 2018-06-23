@@ -6,6 +6,12 @@
 - name: check carbon_host ip address variable
   debug: var=carbon_host
 
+- name: add apt key
+  apt_key: url=https://packagecloud.io/kofonfor/collectd/gpgkey state=present
+
+- name: add Kofonfor Collectd repo
+  apt_repository: repo='deb https://packagecloud.io/kofonfor/collectd/ubuntu/ xenial main' state=present update_cache=yes
+
 - name: install collectd
   apt: name=collectd state=latest
 
