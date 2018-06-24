@@ -12,6 +12,12 @@
 - name: add Kofonfor Collectd repo
   apt_repository: repo='deb https://packagecloud.io/kofonfor/collectd/ubuntu/ xenial main' state=present update_cache=yes
 
+- name: install libprotobuf-c1
+  apt: name=libprotobuf-c1 state=latest
+
+- name: install libmicrohttpd10
+  apt: name=libmicrohttpd10 state=latest
+
 - name: install collectd
   apt: name=collectd state=latest
 
